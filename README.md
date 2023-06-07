@@ -43,6 +43,40 @@ Before import `YACS_Adapter`to write codes, the `ConfigAdapter` class needs to b
     yacs_sync --config config_path --desc desc_path --adapter adapter_path --cfg_instance cfg_instance_var
     ```
 
+    To generate `ConfigAdapter.py` as expected, the format of `config.py` and `description.json` should follow a specific structure. Here is an abstracted example:
+
+    **config.py:**
+
+    ```python
+    class Class1:
+        class1_attribute1 = "attribute_value"
+        class1_attribute2 = 123
+
+    def get_dict_from_class(cls):
+        return {
+            key: value for key, value in cls.__dict__.items() if not key.startswith("_")
+        }
+
+    config_dict = {
+        "Class1": get_dict_from_class(Class1),
+    }
+
+    C = CfgNode(config_dict)
+    ```
+
+    description.json:
+
+    ```json
+    {
+        "Class1": {
+            "class1_attribute1": "Description for class1_attribute1.",
+            "class1_attribute2": "Description for class1_attribute2."
+        }
+    }
+    ```
+    This will generate a ConfigAdapter.py file where each class and attribute pair in your config.py file corresponds to an entry in your description.json file.
+    Please modify this text according to your actual needs and add more details
+
 2. Use the `ConfigAdapter` class in your code: After generating `ConfigAdapter.py`, you can import `AdaptedConfig(default name)` from `ConfigAdapter.py` in your Python scripts.
 
    ```python
